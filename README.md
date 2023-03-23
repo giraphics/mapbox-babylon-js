@@ -1,7 +1,6 @@
-# Babylon.js and WebGL2 Mixing
+# Babylon.js and Mapbox
 
-This demo render babylon scene on top of exising webgl2 based on small implementation to test the babylon working of Baylon JS
- with external webgl2 context.
+This render babylon scene on top of exising webgl2 based mapbox.
 
 ## Getting started
 
