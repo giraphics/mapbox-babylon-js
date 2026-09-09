@@ -134,7 +134,9 @@ export const mapBoxInit = async (accessToken: string, id: string | HTMLElement, 
   });
 };
 
-const accessToken = 'pk.eyJ1IjoibW90aW9uYWwiLCJhIjoiY2trejdqcG05MGR0bzJwcGxiYTZweXcxeCJ9.pWj2g2c21CLdwYHAvRj-aA';
+// Supplied at build time from the MAPBOX_TOKEN environment variable.
+// Never commit a token: see the README.
+const accessToken = process.env.MAPBOX_TOKEN || '';
 const style = 'mapbox://styles/mapbox/streets-v11';
 
 const mapDiv = document.createElement('div');
@@ -143,9 +145,22 @@ mapDiv.style.width = document.body.clientWidth.toString() + 'px';
 mapDiv.style.height = document.body.clientHeight.toString() + 'px';
 document.body.appendChild(mapDiv);
 
-mapBoxInit(accessToken, 'map', style, [103.6958, 1.3542], 17.5).then(() => {
-  // scene started rendering, everything is initialized
-});
+if (!accessToken) {
+  // Without a token Mapbox never fires 'style.load', so the custom layer is
+  // never added and Babylon never initializes. Say so instead of going blank.
+  mapDiv.style.font = '14px/1.6 system-ui, sans-serif';
+  mapDiv.style.padding = '24px';
+  mapDiv.innerHTML =
+    '<strong>No Mapbox access token.</strong><br>' +
+    'Build with <code>MAPBOX_TOKEN=pk.your_token npm run build</code> ' +
+    '(or <code>npm start</code>) using a token from ' +
+    '<a href="https://account.mapbox.com/access-tokens/">account.mapbox.com</a>.';
+  console.error('MAPBOX_TOKEN is not set; the map cannot load. See README.');
+} else {
+  mapBoxInit(accessToken, 'map', style, [103.6958, 1.3542], 17.5).then(() => {
+    // scene started rendering, everything is initialized
+  });
+}
 
 
 

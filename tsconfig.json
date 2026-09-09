@@ -13,6 +13,11 @@
 		"preserveConstEnums":true,
         "allowSyntheticDefaultImports":true,
         "sourceMap": true,
-        "rootDir": "./"
-	}
+        "rootDir": "./",
+        // The app uses no Node globals. Without this, TypeScript auto-includes
+        // every @types package, and current @types/node needs TypeScript 5.
+        "types": []
+	},
+	// Only the app is compiled by ts-loader; tests/ is Playwright's own program.
+	"include": ["src"]
 }

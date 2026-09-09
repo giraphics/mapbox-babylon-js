@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -55,6 +56,10 @@ module.exports = {
     },
     plugins: [
         // new BundleAnalyzerPlugin(),
+        new webpack.DefinePlugin({
+            // Read from the environment at build time so no token is committed.
+            "process.env.MAPBOX_TOKEN": JSON.stringify(process.env.MAPBOX_TOKEN || ""),
+        }),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             inject: true,
